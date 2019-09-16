@@ -1,4 +1,9 @@
-export type List = any[];
+export interface Todo {
+    id: number;
+    label: string;
+}
+
+export type List = Todo[];
 
 export interface Props {
     sort: string;

@@ -1,13 +1,17 @@
 import { Action, on } from '@ngrx/store';
-import { withListReducer } from 'projects/ng-stator';
+import { withListReducer, createListSlice } from 'projects/ng-stator';
 import { TodosListState } from './state';
 import { TodosListActions } from './actions';
 
+const initialState = {
+    todosList: createListSlice({ list: [], props: { sort: 'id', dir: 'asc' } })
+}
+
 const reducer = withListReducer('todosList', TodosListActions)(
-    { todosList: { list: [], filters: [], props: { sort: 'id', dir: 'asc' } } },
-    // FIXME: Cannot overload reducers ?
-    // https://github.com/ngrx/platform/issues/1956
-    // https://github.com/ngrx/platform/pull/2103
+    initialState,
+    // FIXME: Reducers are overwrited.
+    // see https://github.com/ngrx/platform/issues/1956#issuecomment-526720340
+    // Wait for this https://github.com/ngrx/platform/pull/2103
 );
 
 export function todosReducer(
