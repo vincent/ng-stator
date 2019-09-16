@@ -1,6 +1,4 @@
-export interface List {
-    items: any[];
-}
+export type List = any[];
 
 export interface Props {
     sort: string;
