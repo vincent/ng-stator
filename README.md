@@ -4,7 +4,7 @@ NgStator is a VERY OPINIATED ngrx module to wrap most common behaviours used in 
 
 ### what it does
 
-* It can create actions, initial state and reducers to manage the state of either a list, or an form
+* It can create actions, initial state, selectors and reducers to manage the state of either a list, or an form
 
 * Its main goal is to provide a simple common ground for ngrx managed lists and forms in your app, without knowledge of your models
 
@@ -50,6 +50,16 @@ const reducer = withListReducer('todosList', TodosListActions)(
 );
 ```
 
+```ts
+// selectors.ts
+export const visitTodos: MemoizedSelector<object, TodosListState> = createFeatureSelector<TodosListState>('todos');
+
+export const {
+	selectList: selectTodosList,
+	selectError: selectTodosError,
+	selectIsLoading: selectTodosIsLoading,
+} = createListSliceSelectors<List, Props, Filter>(createSelector(visitTodos, (state) => state.todosList));
+```
 
 ## Entity slice
 
@@ -67,19 +77,6 @@ export const {
 //      [LoadEntityFailure] Todo Form :: props<{ error: Error }>
 //
 // confirmation actions are also available
-```
-
-```ts
-// reducer.ts
-const initialState = {
-    todoForm: createEntitytSlice()
-}
-
-// handle each actions to alter the todoForm slice
-const reducer = withEntitytReducer('todoForm', TodoFormActions)(
-    initialState,
-    // your custom reducers
-);
 ```
 
 
