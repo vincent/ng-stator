@@ -6,6 +6,11 @@ export type IsTypedAction<K> = { is: K };
 export function createTypedAction<K extends string, T extends string, P extends object>(
     itype: K,
     type: T,
+): ActionCreator<T, () => TypedAction<T> & IsTypedAction<K>>;
+
+export function createTypedAction<K extends string, T extends string, P extends object>(
+    itype: K,
+    type: T,
     config?: { _as: 'props'; _p: P }
 ): ActionCreator<T, (props: P) => P & TypedAction<T> & IsTypedAction<K>>;
 

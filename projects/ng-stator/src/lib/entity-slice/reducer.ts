@@ -1,35 +1,25 @@
-import { IStoreEntityStateSlice } from './state';
-import { EntityActionType } from './enum';
-import { EntityAction } from './actions';
+import { createReducer, on } from '@ngrx/store';
 
-export function reduceEntitySlice<Entity>(state: IStoreEntityStateSlice<Entity>, action: EntityAction<Entity>): IStoreEntityStateSlice<Entity> {
-	switch (action.is) {
-		case EntityActionType.LoadEntityRequest:
-		case EntityActionType.CreateEntityRequest:
-		case EntityActionType.UpdateEntityRequest:
-			return {
-				...state,
-				isLoading: true,
-				error: false,
-			};
-		case EntityActionType.LoadEntitySuccess:
-		case EntityActionType.CreateEntitySuccess:
-		case EntityActionType.UpdateEntitySuccess:
-			return {
-				...state,
-				isLoading: false,
-				error: false,
-				entity: action.entity,
-			};
-		case EntityActionType.LoadEntityFailure:
-		case EntityActionType.CreateEntityFailure:
-		case EntityActionType.UpdateEntityFailure:
-			return {
-				...state,
-				isLoading: false,
-				error: action.error,
-			};
-		default:
-			return state;
-	}
+export function withEntitytReducer(slice: string, {
+	LoadEntityRequest, CreateEntityRequest, UpdateEntityRequest,
+	LoadEntitySuccess, CreateEntitySuccess, UpdateEntitySuccess,
+	LoadEntityFailure, CreateEntityFailure, UpdateEntityFailure
+}) {
+	return (initialState, ...ons) => createReducer(
+		initialState,
+
+		on(LoadEntityRequest,    state           => ({ ...state, [slice]: { ...state[slice], isLoading: true,  error: false } })),
+		on(CreateEntityRequest,  state           => ({ ...state, [slice]: { ...state[slice], isLoading: true,  error: false } })),
+		on(UpdateEntityRequest,  state           => ({ ...state, [slice]: { ...state[slice], isLoading: true,  error: false } })),
+
+		on(LoadEntitySuccess,    (state, action) => ({ ...state, [slice]: { ...state[slice], isLoading: false, error: false, entity: action.entity } })),
+		on(CreateEntitySuccess,  (state, action) => ({ ...state, [slice]: { ...state[slice], isLoading: false, error: false, entity: action.entity } })),
+		on(UpdateEntitySuccess,  (state, action) => ({ ...state, [slice]: { ...state[slice], isLoading: false, error: false, entity: action.entity } })),
+
+		on(LoadEntityFailure,    (state, action) => ({ ...state, [slice]: { ...state[slice], isLoading: false, error: action.error } })),
+		on(CreateEntityFailure,  (state, action) => ({ ...state, [slice]: { ...state[slice], isLoading: false, error: action.error } })),
+		on(UpdateEntityFailure,  (state, action) => ({ ...state, [slice]: { ...state[slice], isLoading: false, error: action.error } })),
+
+		...ons,
+	);
 }

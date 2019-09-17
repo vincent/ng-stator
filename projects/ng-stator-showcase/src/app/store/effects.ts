@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Observable, of, throwError } from 'rxjs';
-import { map, withLatestFrom, exhaustMap, catchError, delay, switchMap } from 'rxjs/operators';
+import { map, withLatestFrom, exhaustMap, catchError, delay } from 'rxjs/operators';
 
 import * as featureActions from './actions';
 import { List, Props, Filter } from '../app.models';
@@ -14,7 +14,7 @@ export class TodosEffects {
     load$ = createEffect(() => this.actions.pipe(
         ofType(featureActions.LoadTodosListRequest),
         withLatestFrom(this.store.pipe(map(state => visitTodos(state)))),
-        switchMap(([action, state]) => this.loadTodos(state.todosList.props, state.todosList.filters).pipe(
+        exhaustMap(([action, state]) => this.loadTodos(state.todosList.props, state.todosList.filters).pipe(
             map(list => featureActions.LoadTodosListSuccess({ list })),
             catchError(error => of(featureActions.LoadTodosListFailure({ error })))
         ))
@@ -22,7 +22,7 @@ export class TodosEffects {
 
     settings$ = createEffect(() => this.actions.pipe(
         ofType(featureActions.TodosListSettings),
-        map(_ => featureActions.LoadTodosListRequest(null))
+        map(_ => featureActions.LoadTodosListRequest())
     ));
 
     constructor(private store: Store<TodosListState>, private actions: Actions) { }

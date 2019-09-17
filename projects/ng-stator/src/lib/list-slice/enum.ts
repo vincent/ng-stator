@@ -6,3 +6,9 @@ export enum ListActionType {
     AddListFilter    = 'AddListFilter',
     RemoveListFilter = 'RemoveListFilter',
 }
+
+export enum ListReducerStrategy {
+    Append    = 'Append',
+    Prepend   = 'Prepend',
+    Replace   = 'Replace',
+}

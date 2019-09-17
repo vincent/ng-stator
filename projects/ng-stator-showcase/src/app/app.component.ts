@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
     constructor(private store: Store<TodosListState>) {}
 
     ngOnInit(): void {
-        this.store.dispatch(TodosListActions.LoadListRequest(null));
+        this.store.dispatch(TodosListActions.LoadListRequest());
     }
 
     sort(dir: 'asc' | 'desc') {
