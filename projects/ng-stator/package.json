@@ -1,6 +1,10 @@
 {
   "name": "ng-stator",
-  "version": "0.0.4",
+  "author": "Vincent Lark <vincent.lark@gmail.com> (https://github.com/vincent)",
+  "version": "0.0.5",
+  "keywords": ["state", "managment", "ngrx", "boilerplate"],
+  "bugs": { "url" : "https://github.com/owner/project/issues" },
+  "license" : "MIT",
   "peerDependencies": {
     "@angular/common": "^8.2.4",
     "@angular/core": "^8.2.4",
