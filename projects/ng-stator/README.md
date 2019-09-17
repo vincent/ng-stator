@@ -1,23 +1,34 @@
 # NgStator
 
-NgStator is a VERY OPINIATED ngrx module to wrap most common behaviours used in an ngrx store.
+NgStator is a VERY OPINIATED ngrx toolbox to wrap most common behaviours used in an ngrx store.
 
 ### what it does
 
 * It can create actions, initial state, selectors and reducers to manage the state of either a list, or an form
+
 * Its main goal is to provide a simple common ground for ngrx managed lists and forms in your app, without knowledge of your models
+
 * It is available as a library, but it can also easily be copied in your project, for a better customization
 
 ### what it does not
 
 * It does not create any ngrx effects
+
 * It has a very minimal knowledge of your pagination and validation system
+
 * It certainly breaks multiple ngrx paradigms, in exchange for a simpler boilerplate
 
+## Install
+
+```shell
+npm install --save ng-stator
+```
 
 ## List slice
 
 ```ts
+import { createListActions } from 'ng-stator';
+
 // actions.ts
 export const TodosListActions = createListActions('Todos');
 export const {
@@ -60,6 +71,8 @@ export const {
 ## Entity slice
 
 ```ts
+import { createEntityActions } from 'ng-stator';
+
 // actions.ts
 export const TodoFormActions = createEntityActions('Todo Form');
 export const {
