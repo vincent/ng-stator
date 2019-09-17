@@ -1,24 +1,76 @@
 # NgStator
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.2.4.
+NgStator is a VERY OPINIATED ngrx module to wrap most common behaviours used in an ngrx store.
 
-## Code scaffolding
+### what it does
 
-Run `ng generate component component-name --project ng-stator` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project ng-stator`.
-> Note: Don't forget to add `--project ng-stator` or else it will be added to the default project in your `angular.json` file. 
+* It can create actions, initial state, selectors and reducers to manage the state of either a list, or an form
+* Its main goal is to provide a simple common ground for ngrx managed lists and forms in your app, without knowledge of your models
+* It is available as a library, but it can also easily be copied in your project, for a better customization
 
-## Build
+### what it does not
 
-Run `ng build ng-stator` to build the project. The build artifacts will be stored in the `dist/` directory.
+* It does not create any ngrx effects
+* It has a very minimal knowledge of your pagination and validation system
+* It certainly breaks multiple ngrx paradigms, in exchange for a simpler boilerplate
 
-## Publishing
 
-After building your library with `ng build ng-stator`, go to the dist folder `cd dist/ng-stator` and run `npm publish`.
+## List slice
 
-## Running unit tests
+```ts
+// actions.ts
+export const TodosListActions = createListActions('Todos');
+export const {
+    LoadListRequest: LoadTodosListRequest,
+    LoadListSuccess: LoadTodosListSuccess,
+    LoadListFailure: LoadTodosListFailure,
+} = TodosListActions;
+// build actions creators
+//      [LoadListRequest] Todos
+//      [LoadListSuccess] Todos :: props<{ list: Todo[] }>
+//      [LoadListFailure] Todos :: props<{ error: Error }>
+//
+// pagination & filtering actions are also available
+```
 
-Run `ng test ng-stator` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```ts
+// reducer.ts
+const initialState = {
+    todosList: createListSlice({ list: [] })
+}
 
-## Further help
+// handle each actions to alter the todosList slice
+const reducer = withListReducer('todosList', TodosListActions)(
+    initialState,
+    // your custom reducers
+);
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+```ts
+// selectors.ts
+export const visitTodos: MemoizedSelector<object, TodosListState> = createFeatureSelector<TodosListState>('todos');
+
+export const {
+	selectList: selectTodosList,
+	selectError: selectTodosError,
+	selectIsLoading: selectTodosIsLoading,
+} = createListSliceSelectors<List, Props, Filter>(createSelector(visitTodos, (state) => state.todosList));
+```
+
+## Entity slice
+
+```ts
+// actions.ts
+export const TodoFormActions = createEntityActions('Todo Form');
+export const {
+    LoadEntityRequest: LoadTodoFormRequest,
+    LoadEntitySuccess: LoadTodoFormSuccess,
+    LoadEntityFailure: LoadTodoFormFailure,
+} = TodoFormActions;
+// build actions creators
+//      [LoadEntityRequest] Todo Form
+//      [LoadEntitySuccess] Todo Form :: props<{ entity: Todo }>
+//      [LoadEntityFailure] Todo Form :: props<{ error: Error }>
+//
+// confirmation actions are also available
+```
